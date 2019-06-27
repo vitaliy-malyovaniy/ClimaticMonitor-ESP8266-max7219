@@ -35,7 +35,6 @@ void handle_ConfigJSON() {
 }
 
 void HTTP_init() {
-  Serial.print("Start HTTP WebServer ");
   // --------------------Выдаем данные configJson
   HTTP.on("/config.live.json", HTTP_GET, []() {
     // outData();
@@ -47,17 +46,19 @@ void HTTP_init() {
     // readSensor();
     HTTP.send(200, "application/json", sensorsJson); 
   });
+
   HTTP.on("/configs.json", handle_ConfigJSON);  // формирование configs.json страницы для передачи данных в web интерфейс
   // API для устройства
   
   // HTTP.on("/ssdp", handle_Set_Ssdp);         // Установить имя SSDP устройства по запросу вида /ssdp?ssdp=proba
   HTTP.on("/set_timmer", handle_setTimerFromRadio);            
+  
   HTTP.on("/ssid", handle_Set_Ssid);            // Установить имя и пароль роутера по запросу вида /ssid?ssid=home2&password=12345678
   // HTTP.on("/ssidap", handle_Set_Ssidap);     // Установить имя и пароль для точки доступа по запросу вида /ssidap?ssidAP=home1&passwordAP=8765439
+  
   HTTP.on("/restart", handle_Restart);          // Перезагрузка модуля по запросу вида /restart?device=ok
   // Запускаем HTTP сервер
   HTTP.begin();
-  Serial.println("- Ok");
 }
 
 void SSDP_init() {  // SSDP дескриптор
@@ -87,14 +88,13 @@ void handle_Restart() {
   Serial.print("String restart: ");
   Serial.println(restart);
   if (restart == "ok") {                         // Если значение равно Ок
-    HTTP.send(200, "text / plain", "Reset OK"); // Oтправляем ответ Reset OK
+    HTTP.send(200, "text / plain", "Restart - OK"); // Oтправляем ответ Reset OK
     ESP.restart();                                // перезагружаем модуль
   }
   else {                                        // иначе
     HTTP.send(200, "text / plain", "No Reset"); // Oтправляем ответ No Reset
   }
 }
-
 
 // Установка параметров для подключения к внешней AP по запросу вида http://192.168.0.101/ssid?ssid=home2&password=12345678
 void handle_Set_Ssid () {

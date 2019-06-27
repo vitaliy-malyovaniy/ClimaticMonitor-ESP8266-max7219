@@ -32,12 +32,13 @@ function setTimerOffState(submit){
     send_request(submit,server);
     alert("Изменения вступят в силу после перезагрузки. Пожалуйста перезагрузите устройство.");
    }
+
    function set_ssdp(submit){
     server = "/ssdp?ssdp="+val('ssdp');
-    console.log(server);
     send_request(submit,server);
     document.getElementById('ssdp_t').innerHTML = val('ssdp');
    }
+
    function pc_on(submit){
        console.log("PC ON");
        console.log(submit);
@@ -45,10 +46,12 @@ function setTimerOffState(submit){
     console.log(server);
     send_request(submit,server);
     }
+
    function restart(submit,texts){
+       // submit: [object HTMLInputElement]
     if (confirm(texts)) {
-	 server = "/restart?device=ok";
-     send_request(submit,server);
+	 server = "/restart?device=ok"; // роут на адрес ./restart с передачей параметра "device=ok"
+     send_request(submit,server);   // в вызванном попАпчике, после нажатия "ОК", отправляется GET запрос на бекэнд: http://xx.xx.xx.xx/restart?device=ok 
      return true;
     } else {
      return false;

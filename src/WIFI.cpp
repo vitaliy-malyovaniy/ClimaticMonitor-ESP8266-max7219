@@ -2,10 +2,10 @@
 
 
 // // Определяем переменные
-String _ssid     = "Search-M";     // Для хранения SSID
-String _password = "RunTeaM36aLI"; // Для хранения пароля сети
-// String _ssid     = "WX3";
-// String _password = "wx123456";
+// String _ssid     = "Search-M";     // Для хранения SSID
+// String _password = "RunTeaM36aLI"; // Для хранения пароля сети
+String _ssid     = "WX3";
+String _password = "wx123456";
 String _ssidAP = "WiFi";   // SSID AP точки доступа
 String _passwordAP = "";   // пароль точки доступа
 IPAddress apIP(192, 168, 4, 1);

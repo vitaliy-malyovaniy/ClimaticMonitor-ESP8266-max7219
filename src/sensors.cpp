@@ -10,19 +10,19 @@ DHT dht(DHTPIN, DHTTYPE);
 //   humidity => 0
 //   temperature => 1
 void initDht(void){
-   dht.begin();
+  dht.begin();
 }
 
 int16_t readDht (bool who) {
   if (who == 0){ 
-      return dht.readHumidity();
+    return dht.readHumidity();
   }
   if (who == 1){
-        int16_t t;
-        t = dht.readTemperature();
-        jsonWrite(sensorsJson, "termo", t);
-        jsonWrite(sensorsJson, "humin", dht.readHumidity());
-      return t;
+    int16_t t;
+    t = dht.readTemperature();
+    jsonWrite(sensorsJson, "termo", t);
+    jsonWrite(sensorsJson, "humin", dht.readHumidity());
+    return t;
   }
 }
 //    if (isnan(h) || isnan(t) || isnan(f)) {

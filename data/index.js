@@ -52,7 +52,6 @@ function load(){
    loadBlock();
   }
  }
- return console.log("Function Load was down...");
 }
 
 function loadBlock() {
