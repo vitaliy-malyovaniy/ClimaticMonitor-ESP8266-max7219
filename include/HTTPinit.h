@@ -6,8 +6,9 @@
 #include <ArduinoJson.h>
 
 extern String configJson;
+extern String configSetup;
+
 extern String sensorsJson;
-extern String jsonConfig;
 extern String setTimer;
 extern int varTimer;
 
@@ -15,7 +16,6 @@ void HTTP_init(void);
 void SSDP_init (void);
 void handle_PC_On(void);
 
-void handle_ConfigJSON(void);
 void handle_Set_Ssdp(void);
 void handle_Set_Ssid (void);
 void handle_Set_Ssidap(void);

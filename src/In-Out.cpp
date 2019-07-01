@@ -21,15 +21,3 @@ extern DHT dht;
 //     jsonWrite(configJson, "flashChip", String(ESP.getFlashChipId(), HEX));
 //   }  
 
-void DATA_init(){
-  // HTTP.on("/config.live.json", HTTP_GET, []() {
-    jsonWrite(configJson, "deviceState", 0);
-  //    HTTP.send(200, "application/json", configJson);
-  // });
-}
-void readSensor(){
-  // HTTP.on("/config.live.json", HTTP_GET, []() {
-    jsonWrite(sensorsJson, "termo", dht.readTemperature());
-  //    HTTP.send(200, "application/json", configJson);
-  // });
-}

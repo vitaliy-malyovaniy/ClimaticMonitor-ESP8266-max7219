@@ -2,55 +2,35 @@
 #include "WIFI.h"
 #include "sensors.h"
 #include "In-Out.h"
+#include "json.h"
+#include "FileConfig.h"
 
 // extern Adafruit_BME280 bme;
 
 // Web интерфейс для устройства
 ESP8266WebServer HTTP(80);
-String jsonConfig = "{}";
-String configJson = "{}";
-String sensorsJson = "{}";
+
+
+String configSetup = "{}"; // строка в которую ложится "копия" configs.json
+String configJson = "{}";  
+
+String sensorsJson = "{}"; // строка в которой собираются данные с датчиков
+
 String setTimer;
-
-void handle_ConfigJSON() {
-  String root = "{}";  // Формировать строку для отправки в браузер json формат
-  //{"SSDP":"SSDP-test","ssid":"home","password":"i12345678","ssidAP":"WiFi","passwordAP":"","ip":"192.168.0.101"}
-
-  // Резервируем память для json обекта буфер может рости по мере необходимти, предпочтительно для ESP8266
-  DynamicJsonBuffer jsonBuffer;
-  //  вызовите парсер JSON через экземпляр jsonBuffer
-  JsonObject& json = jsonBuffer.parseObject(root);
-  // Заполняем поля json
-  json["SSDP"] = SSDP_Name;
-  json["ssidAP"] = _ssidAP;
-  json["passwordAP"] = _passwordAP;
-  json["ssid"] = _ssid;
-  json["password"] = _password;
-  json["ip"] = WiFi.localIP().toString();
-  // Помещаем созданный json в переменную root
-  Serial.println("response Configs.json");
-  root = "";
-  json.printTo(root);
-  HTTP.send(200, "text/json", root);
-}
 
 void HTTP_init() {
   // --------------------Выдаем данные configJson
-  HTTP.on("/config.live.json", HTTP_GET, []() {
+  HTTP.on("/configs.json", HTTP_GET, []() {
     // outData();
-    HTTP.send(200, "application/json", configJson); 
+    HTTP.send(200, "application/json", configSetup); 
   });
   
   HTTP.on("/sensors.json", HTTP_GET, []() {
-    Serial.println("response Sensor.json");
+    // Serial.println("response Sensor.json");
     // readSensor();
     HTTP.send(200, "application/json", sensorsJson); 
   });
 
-  HTTP.on("/configs.json", handle_ConfigJSON);  // формирование configs.json страницы для передачи данных в web интерфейс
-  // API для устройства
-  
-  // HTTP.on("/ssdp", handle_Set_Ssdp);         // Установить имя SSDP устройства по запросу вида /ssdp?ssdp=proba
   HTTP.on("/set_timmer", handle_setTimerFromRadio);            
   
   HTTP.on("/ssid", handle_Set_Ssid);            // Установить имя и пароль роутера по запросу вида /ssid?ssid=home2&password=12345678
@@ -63,18 +43,30 @@ void HTTP_init() {
 
 void SSDP_init() {  // SSDP дескриптор
   Serial.print("Start SSDP ");
+  String chipID = String( ESP.getChipId() ) + "-" + String( ESP.getFlashChipId() );
   HTTP.on("/description.xml", HTTP_GET, [](){
    SSDP.schema(HTTP.client());
   });
+
+  // --------------------Получаем SSDP со страницы
+  HTTP.on("/ssdp", HTTP_GET, []() {
+    String ssdp = HTTP.arg("ssdp");
+  // configJson=jsonWrite(configJson, "SSDP", ssdp);
+  // configJson=jsonWrite(configSetup, "SSDP", ssdp);
+  SSDP.setName(jsonRead(configSetup, "SSDP"));
+  saveConfig();                 // Функция сохранения данных во Flash
+  HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
+  });
+
   //Если версия  2.0.0 закаментируйте следующую строчку
   SSDP.setDeviceType("upnp:rootdevice");
   SSDP.setSchemaURL("description.xml");
   SSDP.setHTTPPort(80);
-  SSDP.setName(SSDP_Name);
-  SSDP.setSerialNumber("001788102201");
+  SSDP.setName(jsonRead(configSetup, "SSDP"));
+  SSDP.setSerialNumber(chipID);
   SSDP.setURL("/");
   SSDP.setModelName("xlooRoomClimatic");
-  SSDP.setModelNumber("000000000001");
+  SSDP.setModelNumber(chipID + "/" + jsonRead(configSetup, "SSDP"));
   // SSDP.setModelURL("http://");
   SSDP.setManufacturer("Malyovaniy Vitaliy");
   // SSDP.setManufacturerURL("http://");

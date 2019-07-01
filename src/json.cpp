@@ -2,21 +2,23 @@
 #include "json.h"
 
 // ------------- Чтение значения json
-// String jsonRead(String &json, String name) {
-//   DynamicJsonBuffer jsonBuffer;
-//   JsonObject& root = jsonBuffer.parseObject(json);
-//   return root[name].as<String>();
-// }
+// сюда прилетает строка в виде JSON и имя из этого JSON объекта
+String jsonRead(String &json, String name) {
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(json);
+  return root[name].as<String>();
+}
 
 // ------------- Чтение значения json
-// int jsonReadtoInt(String &json, String name) {
-//   DynamicJsonBuffer jsonBuffer;
-//   JsonObject& root = jsonBuffer.parseObject(json);
-//   return root[name];
-// }
+int jsonReadtoInt(String &json, String name) {
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(json);
+  return root[name];
+}
 
-// ------------- Запись значения json String
-String jsonWrite(String &json, String name, String volume) {
+// ------------- Запись значения json int
+// сюда прилетает строка в виде JSON, имя из этого JSON объекта и значение для него
+String jsonWrite(String &json, String name, int volume) {
   DynamicJsonBuffer jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(json);
   root[name] = volume;
@@ -25,8 +27,8 @@ String jsonWrite(String &json, String name, String volume) {
   return json;
 }
 
-// ------------- Запись значения json int
-String jsonWrite(String &json, String name, float volume) {
+// ------------- Запись значения json String
+String jsonWrite(String &json, String name, String volume) {
   DynamicJsonBuffer jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(json);
   root[name] = volume;

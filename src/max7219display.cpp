@@ -4,7 +4,7 @@ LedControl lc(13,14,12,1);
 
 void max7219displayInit(void){
     // Initialize the MAX7219 
-Serial.write("14CORE TEST CODE FOR LED MAX7219 LED TUBE");
+Serial.println("Initialize the MAX7219...");
 lc.shutdown(0,false); // To Enable the Display 
 lc.setIntensity(0,15); // To set the brightness level (0 is min, 15 is max) 
 lc.clearDisplay(0); // To Clear the display register 
