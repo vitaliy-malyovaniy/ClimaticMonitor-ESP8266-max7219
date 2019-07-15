@@ -1,7 +1,7 @@
 #include "FileConfig.h"
 #include "HTTPinit.h"
 #include "WIFI.h"
-#include "sensors.h"
+#include "sensorsDHT11.h"
 
 
 void saveConfig (){

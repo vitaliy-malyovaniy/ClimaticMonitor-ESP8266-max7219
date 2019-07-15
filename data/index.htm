@@ -7,7 +7,7 @@
   <script type="text/javascript" src="/index.js"></script>
   <script type="text/javascript" src="/event_function.js"></script>   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Доп. настройки</title>
+  <title>Climatic monitor</title>
   </head>
  <!-- <body onload="load();"> -->
  <body>
@@ -15,20 +15,24 @@
    <div class="row" style="text-align:center;">
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6" style="margin-top: 30px;">
      <h5 class="alert-info" id="ssdp_t">{{SSDP}}</h5>
-     <hr>
+     <!-- <hr>
         <div class="alert alert-dismissible alert-info" >
             <h4>Timer will be off after: <strong id="timer">{{timerRun}}</strong> minute</h4>
-     </div>
+     </div> -->
      <!-- <h2>Климат в помещении</h2> -->
      <hr>
-
-     <h3>Температура воздуха: <strong id="termo">{{termo}}</strong>&#176;C</h3>
-     <h3>Влажность воздуха: <strong id="humin">{{humin}}</strong>&#037;</h3>
+     <div id="vis_sensors">
+         <div id="sens1"><h3>Температура воздуха: <strong id="termo">{{termo}}</strong>&#176;C</h3></div>
+         <div id="sens2"><h3>Влажность воздуха: <strong id="humid">{{humid}}</strong>&#037;</h3></div>
+         <div id="sens3"><h3>Атмосферное давление: <strong id="pressure">{{pressure}}</strong> мм.рт.ст</h3></div>
+         <div id="sens4"><h3>Уровень СО2: <strong id="eCO2">{{eCO2}}</strong> ppm</h3></div>
+         <div id="sens5"><h3>Органические летучие вещества: <strong id="tvoc">{{tvoc}}</strong> ppb</h3></div>
      <!-- <input class="btn btn-block btn-primary" value="Синхронизировать время" onclick="load_time(this);" type="submit"> -->
+    </div>
      <hr>
      <div class="col-sm-10" style="margin: 30px;">
     <div class="form-group">
-	    <details>
+	    <!-- <details>
         <summary class="btn btn-block btn-default">Подключение к WiFi сети</summary>
         <input id="ssid" value="{{ssid}}" class="form-control" pattern="[0-9a-zA-Z.]{1,15}" placeholder="Имя WiFi сети" style="width:49%; display:inline-block;">
         <input id="password" value="{{password}}" pattern=".{8,15}" onfocus="this.type='text'" type="password" class="form-control" placeholder="Пароль" style="width:49%; display:inline-block;">
@@ -37,7 +41,7 @@
         <input class="btn btn-block btn-warning" value="Перезагрузить устройство" onclick="restart(this,'Вы действительно хотите перезагрузить устройство?');" type="submit">
         <a class="btn btn-block btn-danger" href="/">Страница устройств</a>
         <a class="btn btn-block btn-default" href="/device.htm">Страница управления</a>
-    </details>
+    </details> -->
      <!-- <input id="pcOff" class="btn btn-sm " value="Выключить ПК" onclick="pc_on(this);" type="submit"> 
      <input id="pcOn" class="btn  btn-success btn-sm " value="Включить ПК" onclick="pc_on(this);" type="submit">  -->
     </div>

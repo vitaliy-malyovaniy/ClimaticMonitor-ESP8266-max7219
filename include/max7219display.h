@@ -3,5 +3,5 @@
 
 
 void max7219displayInit (void);
-void printTwoNumb(int, int);
+void printTwoNumb(float, int);
 void printSymbolTermo(void);

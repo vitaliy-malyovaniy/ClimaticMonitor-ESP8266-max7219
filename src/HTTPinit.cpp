@@ -1,6 +1,6 @@
 #include "HTTPinit.h"
 #include "WIFI.h"
-#include "sensors.h"
+#include "sensorsDHT11.h"
 #include "In-Out.h"
 #include "json.h"
 #include "FileConfig.h"
@@ -25,12 +25,6 @@ void HTTP_init() {
     HTTP.send(200, "application/json", configSetup); 
   });
   
-  HTTP.on("/sensors.json", HTTP_GET, []() {
-    // Serial.println("response Sensor.json");
-    // readSensor();
-    HTTP.send(200, "application/json", sensorsJson); 
-  });
-
   HTTP.on("/set_timmer", handle_setTimerFromRadio);            
   
   HTTP.on("/ssid", handle_Set_Ssid);            // Установить имя и пароль роутера по запросу вида /ssid?ssid=home2&password=12345678

@@ -3,15 +3,18 @@
 #include "WIFI.h"
 #include "HTTPinit.h"
 
+
 #include "max7219display.h"
 #include "max7219displayTest.h"
-#include "sensors.h"
+// #include "sensorsDHT11.h"
+#include "sensorsBME280.h"
 #include "FileConfig.h"
 #include "json.h"
 
 
 extern ESP8266WebServer HTTP;
 extern LedControl lc;
+extern TickerScheduler ts;
 
 void setup()
 {
@@ -31,13 +34,15 @@ void setup()
   SSDP_init();  //Настраиваем и запускаем SSDP интерфейс
   HTTP_init(); // Настраиваем и запускаем HTTP интерфейс
     
-  // max7219displayInit();
+  max7219displayInit();
   // Serial.println("initialisation sensor DHT11...");
-  initDht();
+  // initDht();
+  wetherSensor_init();  // инициализация датчика BME280
 }
 
 void loop()
 {
+  ts.update(); // планировщик задач
   HTTP.handleClient(); // отслеживает присутствие клиента и доставляет запрошенную HTML-страницу
 // Serial.println(" ");
 // Serial.print("Huminity: ");
@@ -45,9 +50,11 @@ void loop()
 // delay(1500);
 // Serial.print("Temperature: ");
 // Serial.println(readDht (1));
-    // printTwoNumb(readDht (1), 5);
+    // printTwoNumb(27.6, 5);
+    // printTwoNumb(readDht (2), 5);
     // printSymbolTermo();
-    readDht (1);
-    delay(150);
+    // readDht (2);
+    // ccs811();
+    delay(50);
 
 }

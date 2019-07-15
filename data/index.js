@@ -26,8 +26,35 @@ function termo() {
         xmlHttp.send(null);
         xmlHttp.onload = function(e) {
            sensorsResponse=JSON.parse(xmlHttp.responseText);
-            document.getElementById("termo").innerText = sensorsResponse.termo;
-            document.getElementById("humin").innerText = sensorsResponse.humin;
+        //    console.log("termo: "+sensorsResponse.termo+"   humid: "+sensorsResponse.humid);
+            if (sensorsResponse.termo === undefined){
+                document.getElementById("sens1").setAttribute("class", "hidden"); 
+            }else{
+                document.getElementById("termo").innerText = sensorsResponse.termo;
+            };
+            if (sensorsResponse.pressure === undefined){
+                document.getElementById("sens3").setAttribute("class", "hidden"); 
+            }else{
+                document.getElementById("pressure").innerText = sensorsResponse.pressure;
+            };
+
+            if (sensorsResponse.humid){
+                document.getElementById("humid").innerText = sensorsResponse.humid;
+            }else{
+                document.getElementById("sens2").setAttribute("class", "hidden");                 
+            };
+
+            if (sensorsResponse.eCO2 === undefined){
+                document.getElementById("sens4").setAttribute("class", "hidden"); 
+            }else{
+                document.getElementById("eCO2").innerText = sensorsResponse.eCO2;
+            };
+            if (sensorsResponse.tvoc === undefined){
+                document.getElementById("sens5").setAttribute("class", "hidden"); 
+            }else{
+                document.getElementById("tvoc").innerText = sensorsResponse.tvoc;
+            };
+
             if (sensorsResponse.termo>27){
                 document.getElementById('termo').style.color = 'red';
             }else if (sensorsResponse.termo<19){
@@ -38,7 +65,6 @@ function termo() {
       }
     }
 }
-
 
 // http://localhost:3000/config.live.json
 // http://localhost:3000/configs.json
@@ -101,4 +127,4 @@ function toggle(target) {
 }
 
 
-setInterval(() => { termo()}, 2000);
+setInterval(() => { termo()}, 1000);
