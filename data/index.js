@@ -1,3 +1,11 @@
+const SensorsMeta = {
+    termo:{title: "Температура воздуха: ", unit: " &#176;C"},
+    humid:{title: "Влажность воздуха: ", unit: " &#037;"},
+    pressure:{title: "Атмосферное давление: ", unit: " hPA"},
+    tvoc:{title: "Органические летучие вещества: ", unit: " ppb"},
+    eCO2:{title: "Уровень СО2: ", unit: " ppm"},
+};
+
 var xmlHttp=createXmlHttpObject();
 
 function createXmlHttpObject() {
@@ -26,44 +34,27 @@ function termo() {
         xmlHttp.send(null);
         xmlHttp.onload = function(e) {
            sensorsResponse=JSON.parse(xmlHttp.responseText);
-        //    console.log("termo: "+sensorsResponse.termo+"   humid: "+sensorsResponse.humid);
-            if (sensorsResponse.termo === undefined){
-                document.getElementById("sens1").setAttribute("class", "hidden"); 
-            }else{
-                document.getElementById("termo").innerText = sensorsResponse.termo;
-            };
-            if (sensorsResponse.pressure === undefined){
-                document.getElementById("sens3").setAttribute("class", "hidden"); 
-            }else{
-                document.getElementById("pressure").innerText = sensorsResponse.pressure;
-            };
+           document.getElementById("vis_sensors").innerHTML = "";
+           sensorsNames = Object.keys(sensorsResponse);
+           sensorsNames.map(function(sensorName){
+               renderHTML(
+                   SensorsMeta[sensorName].title, 
+                   sensorsResponse[sensorName],
+                   SensorsMeta[sensorName].unit, 
+                   );
+           });
+       }
+   }
+}
 
-            if (sensorsResponse.humid){
-                document.getElementById("humid").innerText = sensorsResponse.humid;
-            }else{
-                document.getElementById("sens2").setAttribute("class", "hidden");                 
-            };
-
-            if (sensorsResponse.eCO2 === undefined){
-                document.getElementById("sens4").setAttribute("class", "hidden"); 
-            }else{
-                document.getElementById("eCO2").innerText = sensorsResponse.eCO2;
-            };
-            if (sensorsResponse.tvoc === undefined){
-                document.getElementById("sens5").setAttribute("class", "hidden"); 
-            }else{
-                document.getElementById("tvoc").innerText = sensorsResponse.tvoc;
-            };
-
-            if (sensorsResponse.termo>27){
-                document.getElementById('termo').style.color = 'red';
-            }else if (sensorsResponse.termo<19){
-                document.getElementById('termo').style.color = 'blue';
-            }else {
-                document.getElementById('termo').style.color = 'black';
-        }
-      }
-    }
+function renderHTML(label, data_sensor, unit){
+    var visSensors = document.getElementById("vis_sensors");
+    h3 = document.createElement("h3");
+    h3.innerText = label;
+    strong = document.createElement("strong");
+    strong.innerHTML = data_sensor + unit
+    h3.appendChild(strong);
+    return visSensors.appendChild(h3);
 }
 
 // http://localhost:3000/config.live.json

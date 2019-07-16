@@ -6,3 +6,5 @@
 .vscode
 lib
 data/configs.jsonH
+data/configs.jsonW
+old_version_code

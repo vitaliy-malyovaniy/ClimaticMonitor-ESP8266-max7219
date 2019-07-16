@@ -3,8 +3,9 @@
      SCL          D1
      SDA          D2 
 
-     Adress BMP280  0x76
-            BME280  0x58   
+            Adress    Chip ID   
+     BMP280  0x76      0x58
+     BME280  0x76      0x60       
 */
 #include <Wire.h>
 #include "Adafruit_Sensor.h"
@@ -15,7 +16,7 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 void wetherSensor_init(void);
-void readBME(void);
+void readBME280(void);
 void ccs811(void);
 
 extern float t;

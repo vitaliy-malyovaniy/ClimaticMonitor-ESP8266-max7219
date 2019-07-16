@@ -10,11 +10,6 @@ in the development cycle.
 More information about PIO Unit Testing:
 - https://docs.platformio.org/page/plus/unit-testing.html
 
-DATA:    [===       ]  34.6% (used 28384 bytes from 81920 bytes)
-PROGRAM: [==        ]  24.4% (used 254496 bytes from 1044464 bytes)
-
-DATA:    [===       ]  34.6% (used 28384 bytes from 81920 bytes)
-PROGRAM: [==        ]  24.3% (used 254032 bytes from 1044464 bytes)
 
 
 https://marketplace.visualstudio.com/items?itemName=myxvisual.vscode-ts-uml
@@ -66,12 +61,3 @@ function termo() {
     }
 }
 
-function renderHTML(label, data_sensor, unit){
-    var visSensors = document.getElementById("vis_sensors");
-    h3 = document.createElement("h3");
-    h3.innerText = label;
-    strong = document.createElement("strong");
-    strong.innerHTML = data_sensor + unit
-    h3.appendChild(strong);
-    return visSensors.appendChild(h3);
-}
