@@ -57,6 +57,7 @@ void WIFIinit() {
     Serial.println("");
     Serial.println("WiFi up AP");
     StartAPMode();
+    jsonWrite(configSetup, "state_wifi", "false");
   }
   else {
     // Иначе удалось подключиться отправляем сообщение
@@ -65,6 +66,7 @@ void WIFIinit() {
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+    jsonWrite(configSetup, "state_wifi", "true");
   }
 }
 

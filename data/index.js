@@ -1,7 +1,7 @@
 const SensorsMeta = {
     termo:{title: "Температура воздуха: ", unit: " &#176;C"},
     humid:{title: "Влажность воздуха: ", unit: " &#037;"},
-    pressure:{title: "Атмосферное давление: ", unit: " hPA"},
+    pressure:{title: "Атмосферное давление: ", unit: " мм."},
     tvoc:{title: "Органические летучие вещества: ", unit: " ppb"},
     eCO2:{title: "Уровень СО2: ", unit: " ppm"},
 };
@@ -50,10 +50,17 @@ function termo() {
 function renderHTML(label, data_sensor, unit){
     var visSensors = document.getElementById("vis_sensors");
     h3 = document.createElement("h3");
-    h3.innerText = label;
+    divTitul = document.createElement("div");
+    divTitul.setAttribute("class", "col-8 col-md-8 col-sm-8 col-xs-8")
+    divTitul.innerText = label;
     strong = document.createElement("strong");
-    strong.innerHTML = data_sensor + unit
-    h3.appendChild(strong);
+    strong.innerHTML = data_sensor + unit;
+    divResult = document.createElement("div");
+    divResult.setAttribute("class", "col-4 col-sm-4")
+    divResult.appendChild(strong);
+    h3.appendChild(divTitul);
+    h3.appendChild(divResult);
+    
     return visSensors.appendChild(h3);
 }
 
@@ -67,6 +74,9 @@ function load(){
   xmlHttp.onload = function(e) {
    jsonResponse=JSON.parse(xmlHttp.responseText);
    loadBlock();
+       if (jsonResponse.state_wifi == "true"){
+        document.getElementById('setup-wifi').setAttribute("class", "hidden"); 
+    }
   }
  }
 }
@@ -118,4 +128,4 @@ function toggle(target) {
 }
 
 
-setInterval(() => { termo()}, 1000);
+setInterval(() => { termo()}, 1500);

@@ -18,7 +18,7 @@ int jsonReadtoInt(String &json, String name) {
 
 // ------------- Запись значения json int
 // сюда прилетает строка в виде JSON, имя из этого JSON объекта и значение для него
-String jsonWrite(String &json, String name, int volume) {
+String jsonWrite(String &json, String name, float volume) {
   DynamicJsonBuffer jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(json);
   root[name] = volume;

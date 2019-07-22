@@ -5,7 +5,7 @@
 
 
 #include "max7219display.h"
-#include "max7219displayTest.h"
+// #include "max7219displayTest.h"
 // #include "sensorsDHT11.h"
 #include "sensorsBME280.h"
 #include "FileConfig.h"
@@ -55,6 +55,6 @@ void loop()
     // printSymbolTermo();
     // readDht (2);
     // ccs811();
-    delay(50);
+    delay(30);
 
 }

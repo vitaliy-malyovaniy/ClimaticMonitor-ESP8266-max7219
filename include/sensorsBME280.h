@@ -8,15 +8,19 @@
      BME280  0x76      0x60       
 */
 #include <Wire.h>
-#include "Adafruit_Sensor.h"
-#include "Adafruit_BME280.h"
-#include "Adafruit_CCS811.h"
+#include <SparkFunBME280.h>
+#include <SparkFunCCS811.h>
 #include "TickerScheduler.h"
 
 #define SEALEVELPRESSURE_HPA (1013.25)
+#define CCS811_ADDR 0x5A
+// #define PIN_NOT_WAKE 5
 
 void wetherSensor_init(void);
 void readBME280(void);
-void ccs811(void);
+
+void printSensorError(void);
+void printInfoSerial(void);
 
 extern float t;
+extern float eCO2;
