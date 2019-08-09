@@ -7,11 +7,11 @@
  */
 #include "In-Out.h"
 #include "HTTPinit.h"
-#include "sensorsDHT11.h"
+// #include "sensorsDHT11.h"
 #include "json.h"
 
 extern ESP8266WebServer HTTP;
-extern DHT dht;
+// extern DHT dht;
 
 // void outData(){
 //     jsonWrite(configJson, "time", GetTime());

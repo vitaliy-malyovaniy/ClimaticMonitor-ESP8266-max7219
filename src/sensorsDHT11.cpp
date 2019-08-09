@@ -37,6 +37,3 @@ int16_t readDht (int8_t who) {
 
   if (who == 2){ return t;}
 }
-//    if (isnan(h) || isnan(t) || isnan(f)) {
-//     Serial.println("Failed to read from DHT sensor!");
-//     return;

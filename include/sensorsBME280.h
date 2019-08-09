@@ -18,9 +18,11 @@
 
 void wetherSensor_init(void);
 void readBME280(void);
+void readCCS811(void);
 
 void printSensorError(void);
 void printInfoSerial(void);
+void Charts_init(void);
 
-extern float t;
-extern float eCO2;
+extern float BMEtempC;
+extern int16_t eCO2;

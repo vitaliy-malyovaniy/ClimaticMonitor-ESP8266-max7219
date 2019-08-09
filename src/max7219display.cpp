@@ -10,18 +10,26 @@ void max7219displayInit(void){
     lc.shutdown(0,false); // To Enable the Display 
     lc.setIntensity(0,15); // To set the brightness level (0 is min, 15 is max) 
     lc.clearDisplay(0); // To Clear the display register 
-     ts.add(0, 2000, [&](void*){
-        // if (eCO2>1000){
-            printTwoNumb(eCO2, 3);
-            printSymbolCO();
-        // }else{
-        //     printTwoNumb(t, 3);
-        //     printSymbolTermo();
-        // }
+     ts.add(1, 2550, [&](void*){
+        show ();
      }, nullptr, true);
 }
 
-void printTwoNumb(float value_t, int position){
+void show (){
+    static int i = 1;
+    switch (i){
+        case 1: printTwoNumb(eCO2, 3, false);
+                printSymbolCO();
+                break;
+        case 2: printTwoNumb(BMEtempC, 3, true);
+                printSymbolTermo();
+                break;  
+        }
+    i++;
+    if (i==3) i=1;
+};
+
+void printTwoNumb(float value_t, int position, bool point){
     int value;
 
     if (value_t > 100) {
@@ -40,10 +48,9 @@ void printTwoNumb(float value_t, int position){
      lc.clearDisplay(0); 
     lc.setDigit(0,position,numInPos1, false);
     lc.setDigit(0,position+2,numInPos3, false);
-    lc.setDigit(0,position+1,numInPos2, false);
+    lc.setDigit(0,position+1,numInPos2, point);
   
     if(!numInPos4){
-        // lc.setDigit(0,position+1,numInPos2, true);
         lc.setRow(0,position+3,B00000000);
     }else{
         lc.setDigit(0,position+3,numInPos4, false);
@@ -63,3 +70,13 @@ void printSymbolCO(){
  lc.setRow(0,2,B00001101); // "c"
  lc.setRow(0,1,B00011101); // 'o'
 } 
+
+void printSymbolPress(){
+ lc.setRow(0,2,B00000101); // "r"
+ lc.setRow(0,1,B0001111);  // 't'
+}
+ 
+// 01000000 - a
+// 00100000 - b
+// 00001000 - d
+// 00000010 - f

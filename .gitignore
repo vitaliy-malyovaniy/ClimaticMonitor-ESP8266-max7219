@@ -5,7 +5,7 @@
 .vscode/c_cpp_properties.json
 .vscode/extensions.json
 .vscode
-lib
+lib/
 data/configs.jsonH
 data/configs.jsonW
 data/configs.json

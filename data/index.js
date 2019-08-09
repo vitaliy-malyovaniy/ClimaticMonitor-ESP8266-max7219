@@ -128,4 +128,4 @@ function toggle(target) {
 }
 
 
-setInterval(() => { termo()}, 1500);
+setInterval(() => { termo()}, 2000);

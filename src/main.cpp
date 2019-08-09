@@ -3,14 +3,10 @@
 #include "WIFI.h"
 #include "HTTPinit.h"
 
-
 #include "max7219display.h"
-// #include "max7219displayTest.h"
-// #include "sensorsDHT11.h"
 #include "sensorsBME280.h"
 #include "FileConfig.h"
 #include "json.h"
-
 
 extern ESP8266WebServer HTTP;
 extern LedControl lc;
@@ -19,8 +15,6 @@ extern TickerScheduler ts;
 void setup()
 {
   Serial.begin(115200);
-// displayDemo();
-// -------------------------------------
   FS_init();  //Запускаем файловую систему
   configSetup = readFile("configs.json", 4096); // считали файл configs.json и поместили в переменную "configSetup"
   delay(1000);
@@ -35,9 +29,8 @@ void setup()
   HTTP_init(); // Настраиваем и запускаем HTTP интерфейс
     
   max7219displayInit();
-  // Serial.println("initialisation sensor DHT11...");
-  // initDht();
   wetherSensor_init();  // инициализация датчика BME280
+  Charts_init();
 }
 
 void loop()
@@ -55,6 +48,5 @@ void loop()
     // printSymbolTermo();
     // readDht (2);
     // ccs811();
-    delay(30);
-
+    delay(1);
 }

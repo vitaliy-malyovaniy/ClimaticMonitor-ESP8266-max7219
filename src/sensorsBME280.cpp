@@ -6,14 +6,16 @@
 #define WALK 0  // // GPIO0 or D3 - what digital pin we're connected to
 
 extern ESP8266WebServer HTTP;
-TickerScheduler ts(2);
+TickerScheduler ts(3);
+const uint16_t lengt=30; 
+uint16_t t[lengt];
 
 //Global sensor objects
 CCS811 myCCS811(CCS811_ADDR);
 BME280 myBME280;
 
-float t;
-float eCO2;
+float BMEtempC, BMEhumid;
+int16_t eCO2;
 
 // printDriverError декодирует тип CCS811Core :: status и печатает тип ошибки на последовательном терминале.
 // Сохраните возвращаемое значение любой функции типа CCS811Core :: status, 
@@ -50,6 +52,7 @@ void wetherSensor_init(){
   Wire.begin();
   pinMode(WALK, OUTPUT); 
   digitalWrite(WALK, LOW);
+  delay(80);
     //This begins the CCS811 sensor and prints error status of .begin()
   CCS811Core::status returnCode = myCCS811.begin();
   Serial.print("CCS811 begin exited with: ");
@@ -60,48 +63,96 @@ void wetherSensor_init(){
   //For I2C, enable the following and disable the SPI section
   myBME280.settings.commInterface = I2C_MODE;
   myBME280.settings.I2CAddress = 0x76;
-  myBME280.settings.runMode = 3; //Normal mode
+  myBME280.settings.runMode = 3; // Forced // 3 - Normal mode
   myBME280.settings.filter = 4;
+  // myBME280.settings.tempOverSample = 5;
+  myBME280.settings.tStandby = 0; // 0, 0.5ms //  1, 62.5ms //  2, 125ms //  3, 250ms //  4, 500ms //  5, 1000ms //  6, 10ms //  7, 20ms
 
-  //Calling .begin() causes the settings to be loaded
   delay(10);  //Make sure sensor had enough time to turn on. BME280 requires 2ms to start up.
   myBME280.begin();
-    if(!returnCode){                  // если CCS811Core = "SUCCESS"
-      ts.add(1, 5125, [&](void*){
-        readBME280();
-      }, nullptr, true);
-    }else{
-      Serial.println(">> Error sensor!  <<");
-    }
+      if(!returnCode){                  // если CCS811Core = "SUCCESS"
+        ts.add(0, 2500, [&](void*){
+          static int j=0;
+          if (j == 0){
+            readBME280();
+            j++;
+          }else{
+            readCCS811();
+            j--;
+          }
+        }, nullptr, true);
+      }else{
+        Serial.println(">> Error sensor!  <<");
+      }
     digitalWrite(WALK, HIGH);
 }
 
+void Charts_init() {
+  HTTP.on("/graf.json", HTTP_GET, []() {
+    
+     ts.add(2, 30000, [&](void*){   // каждые 30 секунд
+       const int arrlength = 20;
+       static int arr_tmp[arrlength];     // в теченнии минуты
+       static int k=0;
+       arr_tmp[k] = eCO2;
+       if (eCO2 > 8500) arr_tmp[k] = 8500;
+       k++;
+       if (k==arrlength){
+         k=0;
+         int summa = 0;
+         int avarage = 0;
+         for(int n=0; n<arrlength; n++){
+           summa += arr_tmp[n];
+         }
+         avarage = summa / arrlength;
+        for (int r=lengt-1; r>0; r--){
+          t[r] = t[r-1];
+        }
+        t[0] = avarage;
+       }
+     }, nullptr, true);
+    
+    String root = "{}";
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& json = jsonBuffer.parseObject(root);
+    JsonArray& data = json.createNestedArray("data");
+     for (int i=0; i<lengt; i++){  
+        data.add(t[i]);
+     }
+     root = "";
+    json.printTo(root);
+    HTTP.send(200, "application/json", root);
+  });
+}
+
 void readBME280(){
+  float BMEpress;
+  BMEtempC = myBME280.readTempC();
+  BMEhumid = myBME280.readFloatHumidity();
+  BMEpress = myBME280.readFloatPressure()/ 133.322;
+
+  jsonWrite(sensorsJson, "termo", BMEtempC);
+  jsonWrite(sensorsJson, "humid", BMEhumid);
+  jsonWrite(sensorsJson, "pressure", BMEpress);
+
+}
+
+void readCCS811(){
   digitalWrite(WALK, LOW);
-  while(!myCCS811.dataAvailable());
+  delay(50);
   if (myCCS811.dataAvailable()) {
-    float BMEtempC;
-    float BMEhumid, BMEpress, tvoc;
+    float tvoc;
     //Calling this function updates the global tVOC and eCO2 variables
     myCCS811.readAlgorithmResults();
-    //printInfoSerial fetches the values of tVOC and eCO2
-    // printInfoSerial();
-
-    BMEtempC = myBME280.readTempC();
-    BMEhumid = myBME280.readFloatHumidity();
-    BMEpress = myBME280.readFloatPressure()/ 133.322;
 
     //This sends the temperature data to the CCS811
     myCCS811.setEnvironmentalData(BMEhumid, BMEtempC);
     eCO2 = myCCS811.getCO2();
     tvoc = myCCS811.getTVOC();
-
-    jsonWrite(sensorsJson, "termo", BMEtempC);
-    jsonWrite(sensorsJson, "humid", BMEhumid);
-    jsonWrite(sensorsJson, "pressure", BMEpress);
+ 
     jsonWrite(sensorsJson, "eCO2", eCO2);
     jsonWrite(sensorsJson, "tvoc", tvoc);
-
+ 
   }else if (myCCS811.checkForStatusError()){
     //If the CCS811 found an internal error, print it.
     printSensorError();

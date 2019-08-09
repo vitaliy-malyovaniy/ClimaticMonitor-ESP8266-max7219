@@ -1,11 +1,9 @@
 #include "FileConfig.h"
 #include "HTTPinit.h"
 #include "WIFI.h"
-#include "sensorsDHT11.h"
-
 
 void saveConfig (){
-  writeFile("config.json", configSetup );
+  writeFile("configs.json", configSetup );
 }
 
   // ------------- Чтение файла в строку
