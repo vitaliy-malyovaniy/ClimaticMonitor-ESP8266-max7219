@@ -7,8 +7,8 @@
 
 extern ESP8266WebServer HTTP;
 TickerScheduler ts(3);
-const uint16_t lengt=30; 
-uint16_t _CO2[lengt];
+const uint8_t lengt=30; 
+int16_t _CO2[lengt];
 
 //Global sensor objects
 CCS811 myCCS811(CCS811_ADDR);
@@ -87,47 +87,40 @@ void wetherSensor_init(){
     digitalWrite(WALK, HIGH);
 }
 
-void array_temp_eCO2(int *array){ // массив временных данных для подсчета средних показаний после того как он будет заполнен
-	const int arrLength = 20;
-       static int arr_tmp[arrLength];     // в теченнии минуты
-       static int i=0;
-       arr_tmp[i] = eCO2;
-       if (eCO2 > 8500) arr_tmp[i] = 8500;
-       i++;
-       if (i == arrLength){
-         i=0;
-         int summa = 0;
-         int avarage = 0;
-         for(int j=0; j<arrLength; j++){
-           summa += arr_tmp[j];
-         }
-         avarage = summa / arrLength;
-		 
-        for (int r=lengt-1; r>0; r--){
-          array[r] = array[r-1];
-        }
-        array[0] = avarage;
-       }
+void array_temp_eCO2(int16_t *array){ // массив временных данных для подсчета средних показаний после того как он будет заполнен
+	const int8_t arrLength = 20;
+  static int8_t i=0;
+  static int32_t summa = 0;
+  summa += eCO2;
+  i++;
+  
+  if (i == arrLength){
+    i=0;
+    for (int j=lengt-1; j>0; j--){
+      array[j] = array[j-1];
+    }
+    array[0] = summa / arrLength;
+    summa=0;
+  }
 }
 
 void Charts_init() {
   HTTP.on("/graf.json", HTTP_GET, []() {
-    
-     ts.add(2, 30000, [&](void*){   // каждые 30 секунд
-       array_temp_eCO2((int*) _CO2);
-     }, nullptr, true);
-    
     String root = "{}";
     DynamicJsonBuffer jsonBuffer;
     JsonObject& json = jsonBuffer.parseObject(root);
     JsonArray& data = json.createNestedArray("data");
-     for (int i=0; i<lengt; i++){  
-        data.add(_CO2[i]);
+     for (int k=0; k<lengt; k++){  
+        data.add(_CO2[k]);
      }
      root = "";
     json.printTo(root);
     HTTP.send(200, "application/json", root);
   });
+        
+     ts.add(2, 30000, [&](void*){   // каждые 30 секунд
+      array_temp_eCO2((int16_t*) _CO2);
+     }, nullptr, true);
 }
 
 void readBME280(){
