@@ -61,3 +61,21 @@ function termo() {
     }
 }
 
+
+int c;
+int myArray[] = {100, 30, 890, 645, 251};
+void setup() {
+  c = sumFunction((int*) myArray);   // результат 1916
+}
+void loop() {
+}
+int sumFunction(int *intArray) {
+  int sum = 0;   // переменная для сложения
+  for (byte i = 0; i < 5; i++) {
+    sum += intArray[i];
+  }
+  return sum;
+}
+
+DATA:    [====      ]  40.4% (used 33076 bytes from 81920 bytes)
+PROGRAM: [===       ]  31.9% (used 333524 bytes from 1044464 bytes)

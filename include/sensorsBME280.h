@@ -23,6 +23,7 @@ void readCCS811(void);
 void printSensorError(void);
 void printInfoSerial(void);
 void Charts_init(void);
+void array_temp_eCO2(int *array);
 
 extern float BMEtempC;
 extern int16_t eCO2;

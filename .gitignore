@@ -1,7 +1,7 @@
 .pio
 .pioenvs
 .piolibdeps
-.vscode/
+.vscode/*
 lib/
 data/configs.*
 old_version_code
