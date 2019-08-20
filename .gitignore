@@ -5,3 +5,4 @@
 lib/
 data/configs.*
 old_version_code
+test/
