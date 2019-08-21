@@ -10,9 +10,46 @@ in the development cycle.
 More information about PIO Unit Testing:
 - https://docs.platformio.org/page/plus/unit-testing.html
 
-DATA:    [===       ]  34.6% (used 28384 bytes from 81920 bytes)
-PROGRAM: [==        ]  24.4% (used 254496 bytes from 1044464 bytes)
 
-DATA:    [===       ]  34.6% (used 28384 bytes from 81920 bytes)
-PROGRAM: [==        ]  24.3% (used 254032 bytes from 1044464 bytes)
 
+https://marketplace.visualstudio.com/items?itemName=myxvisual.vscode-ts-uml
+
+https://marketplace.visualstudio.com/items?itemName=AleksandarDev.vscode-sequence-diagrams
+
+WIFI ESP8266 суточный график температуры и влажности
+http://geekmatic.in.ua/grafik_temperaturi_esp8266
+
+
+function termo() {
+    if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
+        xmlHttp.open('GET', "/sensors.json", true);
+        xmlHttp.send(null);
+        xmlHttp.onload = function(e) {
+           sensorsResponse=JSON.parse(xmlHttp.responseText);
+           document.getElementById("vis_sensors").innerHTML = " ";
+            if (sensorsResponse.termo !== undefined){
+                renderHTML("Температура воздуха: ", sensorsResponse.termo, " &#176;C");
+            };
+            if (sensorsResponse.humin !== undefined){
+                renderHTML("Влажность воздуха: ", sensorsResponse.humin, " &#037;");
+            };
+            if (sensorsResponse.pressure !== undefined){
+                renderHTML("Атмосферное давление: ", sensorsResponse.pressure, " hPA");
+            };
+            if (sensorsResponse.tvoc !== undefined){
+                renderHTML("Органические летучие вещества: ", sensorsResponse.tvoc, " ppb");
+            };
+            if (sensorsResponse.eCO2 !== undefined){
+                renderHTML("Уровень СО2: ", sensorsResponse.eCO2, " ppm");
+            };
+        //     if (sensorsResponse.termo>29){
+        //             document.getElementById('termo').style.color = 'red';
+        //         }else if (sensorsResponse.termo<19){
+        //             document.getElementById('termo').style.color = 'blue';
+        //         }else document.getElementById('termo').style.color = 'black';
+        }
+    }
+}
+
+DATA:    [====      ]  40.4% (used 33076 bytes from 81920 bytes)
+PROGRAM: [===       ]  31.9% (used 333524 bytes from 1044464 bytes)

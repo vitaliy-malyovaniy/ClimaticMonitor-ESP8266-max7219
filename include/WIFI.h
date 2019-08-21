@@ -10,6 +10,6 @@ extern String _passwordAP;   // пароль точки доступа
 extern String SSDP_Name;
 
 void WIFIinit(void);
-bool StartAPMode(bool);
+bool StartAPMode(void);
 
 #endif

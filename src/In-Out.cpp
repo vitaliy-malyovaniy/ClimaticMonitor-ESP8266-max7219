@@ -7,11 +7,11 @@
  */
 #include "In-Out.h"
 #include "HTTPinit.h"
-#include "sensors.h"
+// #include "sensorsDHT11.h"
 #include "json.h"
 
 extern ESP8266WebServer HTTP;
-extern DHT dht;
+// extern DHT dht;
 
 // void outData(){
 //     jsonWrite(configJson, "time", GetTime());
@@ -21,15 +21,3 @@ extern DHT dht;
 //     jsonWrite(configJson, "flashChip", String(ESP.getFlashChipId(), HEX));
 //   }  
 
-void DATA_init(){
-  // HTTP.on("/config.live.json", HTTP_GET, []() {
-    jsonWrite(configJson, "deviceState", 0);
-  //    HTTP.send(200, "application/json", configJson);
-  // });
-}
-void readSensor(){
-  // HTTP.on("/config.live.json", HTTP_GET, []() {
-    jsonWrite(sensorsJson, "termo", dht.readTemperature());
-  //    HTTP.send(200, "application/json", configJson);
-  // });
-}
