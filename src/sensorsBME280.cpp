@@ -125,7 +125,7 @@ void array_temp_any(int16_t *array, int16_t item){ // массив времен�
 void array_temp_any(float *array, float item){ // массив временных данных для подсчета средних показаний после того как он будет заполнен
 	const int8_t arrLength = 20;
   static int8_t i=0;
-  static int32_t summa = 0;
+  static float summa = 0;
   summa += item;
   i++;
   
@@ -141,7 +141,7 @@ void array_temp_any(float *array, float item){ // массив временны�
 
 void Charts_init() {
   HTTP.on("/graf.json", HTTP_GET, []() {
-    String chart = graf((int16_t*) _CO2, lengt);
+    String chart = graf((int16_t*) _CO2, (float*) _termo, lengt); //
     HTTP.send(200, "application/json", chart);
   });
         

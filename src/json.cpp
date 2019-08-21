@@ -88,9 +88,9 @@ String graf(int16_t *_eCO2, uint8_t lengthChart) {
   // вызовите парсер JSON через экземпляр jsonBuffer
   JsonObject& json = jsonBuffer.parseObject(root);
   // Заполняем поля json
-  JsonArray& data = json.createNestedArray("data");
+  JsonArray& data0 = json.createNestedArray("data0");
      for (int k=0; k<lengthChart; k++){  
-        data.add(_eCO2[k]);
+        data0.add(_eCO2[k]);
      }
   // Помещаем созданный json в переменную root
   root = "";
@@ -106,10 +106,11 @@ String graf(int16_t *_eCO2, float *__termo, uint8_t lengthChart) {
   // вызовите парсер JSON через экземпляр jsonBuffer
   JsonObject& json = jsonBuffer.parseObject(root);
   // Заполняем поля json
-  JsonArray& data = json.createNestedArray("data");
+  JsonArray& data0 = json.createNestedArray("data0");
+  JsonArray& data1 = json.createNestedArray("data1");
      for (int k=0; k<lengthChart; k++){  
-        data.add(_eCO2[k]);
-        data.add(__termo[k]);
+        data0.add(_eCO2[k]);
+        data1.add(__termo[k]);
      }
   // Помещаем созданный json в переменную root
   root = "";

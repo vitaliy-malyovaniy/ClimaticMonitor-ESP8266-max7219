@@ -15,6 +15,9 @@ var lengthArray = 30;
 var dataShow = [
     [1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20] , [21], [22], [23], [24], [25], [26], [27], [28], [29], [30]
   ];
+var dataShow1 = [
+    [1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20] , [21], [22], [23], [24], [25], [26], [27], [28], [29], [30]
+  ];
 
 function chart(){
   if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
@@ -23,7 +26,8 @@ function chart(){
       xmlHttp.onload = function(e) {
         const chartResponse=JSON.parse(xmlHttp.responseText);
           for (let i=0; i<dataShow.length; i++){
-            dataShow[i][1] = +chartResponse.data[i];
+            dataShow[i][1] = +chartResponse.data0[i];
+            dataShow1[i][1] = +chartResponse.data1[i];
           }
       }
   }
@@ -33,20 +37,22 @@ chart();
 
 function drawChart() {
 var data = new google.visualization.DataTable();
-// data.addColumn('string', 'date');
 data.addColumn('number', 'Day');
-data.addColumn('number', 'CO2, ppm');
-// data.addColumn('number', 'TOV, ppb');
-// data.addColumn('number', 'Termo, C');
+data.addColumn('number');  // , 'CO2, ppm'
 data.addRows(dataShow);
+
+var data1 = new google.visualization.DataTable();
+data1.addColumn('number', 'Day');
+data1.addColumn('number');
+data1.addRows(dataShow1);
 
 const options = {
     width: '100%',
-    title: 'Climatic monitor: Level CO2',
+    title: 'Level CO2, ppm',
     // curveType: 'function',
     legend: { position: 'bottom' },
     vAxis: {
-      title: 'CO2',
+      // title: 'CO2',
       maxValue: 3500,
       minValue: 400,
       gridlines: { count: 30 },
@@ -58,10 +64,31 @@ const options = {
     }
   };
 
+const options1 = {
+    width: '100%',
+    title: 'Temperature, °C',
+    // curveType: 'function',
+    legend: { position: 'bottom' },
+    vAxis: {
+      // title: '°C',
+      maxValue: 45,
+      gridlines: { count: 30 }
+    },
+    hAxis: {
+        format: '', // 'HH:mm',
+        gridlines: { count: 20 }
+    }
+  };
+
   var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
   var formatter = new google.visualization.DateFormat({pattern: 'dd.MM.yyyy HH:mm'});
   formatter.format(data, 0);
   chart.draw(data, options);
+
+  var chart1 = new google.visualization.LineChart(document.getElementById('curve_chart1'));
+  var formatter1 = new google.visualization.DateFormat({pattern: 'dd.MM.yyyy HH:mm'});
+  formatter1.format(data1, 0);
+  chart1.draw(data1, options1);
 }
 
 setInterval(() => { chart(), drawChart() }, 5000);
