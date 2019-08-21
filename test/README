@@ -20,16 +20,6 @@ WIFI ESP8266 суточный график температуры и влажн�
 http://geekmatic.in.ua/grafik_temperaturi_esp8266
 
 
-================================
-Более подробно:
-1. Отключить вход WAKE CCS811 от GPIO ESP
-2. Соединить вход WAKE CCS811 с GND (-)
-3. Включить питание.
-4. Запустить сканер I2c
-Должен появиться адрес датчика CCS811. 
-
-
-
 function termo() {
     if(xmlHttp.readyState==0 || xmlHttp.readyState==4){
         xmlHttp.open('GET', "/sensors.json", true);
@@ -59,22 +49,6 @@ function termo() {
         //         }else document.getElementById('termo').style.color = 'black';
         }
     }
-}
-
-
-int c;
-int myArray[] = {100, 30, 890, 645, 251};
-void setup() {
-  c = sumFunction((int*) myArray);   // результат 1916
-}
-void loop() {
-}
-int sumFunction(int *intArray) {
-  int sum = 0;   // переменная для сложения
-  for (byte i = 0; i < 5; i++) {
-    sum += intArray[i];
-  }
-  return sum;
 }
 
 DATA:    [====      ]  40.4% (used 33076 bytes from 81920 bytes)
