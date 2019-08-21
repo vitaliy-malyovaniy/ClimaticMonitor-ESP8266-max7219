@@ -24,6 +24,8 @@ void printSensorError(void);
 void printInfoSerial(void);
 void Charts_init(void);
 void array_temp_eCO2(int16_t *array);
+void array_temp_any(int16_t *array, int16_t item);
+void array_temp_any(float *array, float item);
 
 extern float BMEtempC;
 extern int16_t eCO2;

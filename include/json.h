@@ -8,3 +8,5 @@ String jsonWrite(String &, String, float);
 
 String graf(int);
 String graf(float);
+String graf(int16_t *, uint8_t);
+String graf(int16_t *, float *, uint8_t);

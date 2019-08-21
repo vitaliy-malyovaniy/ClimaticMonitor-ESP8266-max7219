@@ -9,6 +9,7 @@ extern ESP8266WebServer HTTP;
 TickerScheduler ts(3);
 const uint8_t lengt=30; 
 int16_t _CO2[lengt];
+float _termo[lengt];
 
 //Global sensor objects
 CCS811 myCCS811(CCS811_ADDR);
@@ -104,23 +105,50 @@ void array_temp_eCO2(int16_t *array){ // массив временных дан�
   }
 }
 
+void array_temp_any(int16_t *array, int16_t item){ // массив временных данных для подсчета средних показаний после того как он будет заполнен
+	const int8_t arrLength = 20;
+  static int8_t i=0;
+  static int32_t summa = 0;
+  summa += item;
+  i++;
+  
+  if (i == arrLength){
+    i=0;
+    for (int j=lengt-1; j>0; j--){
+      array[j] = array[j-1];
+    }
+    array[0] = summa / arrLength;
+    summa=0;
+  }
+}
+
+void array_temp_any(float *array, float item){ // массив временных данных для подсчета средних показаний после того как он будет заполнен
+	const int8_t arrLength = 20;
+  static int8_t i=0;
+  static int32_t summa = 0;
+  summa += item;
+  i++;
+  
+  if (i == arrLength){
+    i=0;
+    for (int j=lengt-1; j>0; j--){
+      array[j] = array[j-1];
+    }
+    array[0] = summa / arrLength;
+    summa=0;
+  }
+}
+
 void Charts_init() {
   HTTP.on("/graf.json", HTTP_GET, []() {
-    String root = "{}";
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& json = jsonBuffer.parseObject(root);
-    JsonArray& data = json.createNestedArray("data");
-     for (int k=0; k<lengt; k++){  
-        data.add(_CO2[k]);
-     }
-     root = "";
-    json.printTo(root);
-    HTTP.send(200, "application/json", root);
+    String chart = graf((int16_t*) _CO2, lengt);
+    HTTP.send(200, "application/json", chart);
   });
         
-     ts.add(2, 30000, [&](void*){   // каждые 30 секунд
-      array_temp_eCO2((int16_t*) _CO2);
-     }, nullptr, true);
+  ts.add(2, 30000, [&](void*){   // каждые 30 секунд
+  array_temp_any((int16_t*) _CO2, eCO2);
+  array_temp_any((float*) _termo, BMEtempC);
+  }, nullptr, true);
 }
 
 void readBME280(){

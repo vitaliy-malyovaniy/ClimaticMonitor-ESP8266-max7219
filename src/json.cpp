@@ -78,3 +78,41 @@ String graf(float datas) {
   json.printTo(root);
   return root;
 }
+
+
+String graf(int16_t *_eCO2, uint8_t lengthChart) {
+  String root = "{}";  // Формировать строку для отправки в браузер json формат
+  // {"data":[1]}
+  // Резервируем память для json обекта буфер может рости по мере необходимти, предпочтительно для ESP8266
+  DynamicJsonBuffer jsonBuffer;
+  // вызовите парсер JSON через экземпляр jsonBuffer
+  JsonObject& json = jsonBuffer.parseObject(root);
+  // Заполняем поля json
+  JsonArray& data = json.createNestedArray("data");
+     for (int k=0; k<lengthChart; k++){  
+        data.add(_eCO2[k]);
+     }
+  // Помещаем созданный json в переменную root
+  root = "";
+  json.printTo(root);
+  return root;
+}
+
+String graf(int16_t *_eCO2, float *__termo, uint8_t lengthChart) {
+  String root = "{}";  // Формировать строку для отправки в браузер json формат
+  // {"data":[1]}
+  // Резервируем память для json обекта буфер может рости по мере необходимти, предпочтительно для ESP8266
+  DynamicJsonBuffer jsonBuffer;
+  // вызовите парсер JSON через экземпляр jsonBuffer
+  JsonObject& json = jsonBuffer.parseObject(root);
+  // Заполняем поля json
+  JsonArray& data = json.createNestedArray("data");
+     for (int k=0; k<lengthChart; k++){  
+        data.add(_eCO2[k]);
+        data.add(__termo[k]);
+     }
+  // Помещаем созданный json в переменную root
+  root = "";
+  json.printTo(root);
+  return root;
+}
